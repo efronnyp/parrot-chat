@@ -2,12 +2,9 @@ package com.efronnypardede.parrotchat.di
 
 import android.content.Context
 import androidx.room.Room
-import com.efronnypardede.parrotchat.data.source.MessageDataRepository
-import com.efronnypardede.parrotchat.data.source.MessageDataSource
-import com.efronnypardede.parrotchat.data.source.MessageRepository
-import com.efronnypardede.parrotchat.data.source.local.MessageDao
-import com.efronnypardede.parrotchat.data.source.local.MessageLocalDataSource
-import com.efronnypardede.parrotchat.data.source.local.ParrotChatDatabase
+import com.efronnypardede.parrotchat.data.source.*
+import com.efronnypardede.parrotchat.data.source.local.*
+import com.efronnypardede.parrotchat.data.source.remote.ChatRoomRemoteDataSource
 import com.efronnypardede.parrotchat.data.source.remote.MessageRemoteDataSource
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -45,6 +42,11 @@ abstract class AppModule {
 
     @Provides
     @Singleton
+    fun provideChatRoomDao(parrotChatDatabase: ParrotChatDatabase): ChatRoomDao =
+        parrotChatDatabase.chatRoomDao()
+
+    @Provides
+    @Singleton
     fun provideGson(): Gson = GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         .create()
@@ -76,4 +78,18 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun provideMessageRepository(implementation: MessageDataRepository): MessageRepository
+
+    @Binds
+    @Singleton
+    @LocalChatRoomDataSource
+    abstract fun provideLocalChatRoomDataSource(implementation: ChatRoomLocalDataSource): ChatRoomDataSource
+
+    @Binds
+    @Singleton
+    @RemoteChatRoomDataSource
+    abstract fun provideRemoteChatRoomDataSource(implementation: ChatRoomRemoteDataSource): ChatRoomDataSource
+
+    @Binds
+    @Singleton
+    abstract fun provideChatRoomRepository(implementation: ChatRoomDataRepository): ChatRoomRepository
 }
