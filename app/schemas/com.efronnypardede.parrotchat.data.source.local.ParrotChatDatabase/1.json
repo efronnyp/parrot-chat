@@ -1,0 +1,119 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "21138aaf55ff12a19449cf4bfa842cfe",
+    "entities": [
+      {
+        "tableName": "chat_friends",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `friends_name` TEXT NOT NULL, `image_url` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "friendsName",
+            "columnName": "friends_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_chat_friends_friends_name",
+            "unique": true,
+            "columnNames": [
+              "friends_name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_chat_friends_friends_name` ON `${TABLE_NAME}` (`friends_name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "messages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `chat_friends_id` INTEGER NOT NULL, `content` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`chat_friends_id`) REFERENCES `chat_friends`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chatFriendsId",
+            "columnName": "chat_friends_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_messages_chat_friends_id",
+            "unique": false,
+            "columnNames": [
+              "chat_friends_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_messages_chat_friends_id` ON `${TABLE_NAME}` (`chat_friends_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "chat_friends",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "chat_friends_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "RoomWithLastMessage",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT cf.*, m.content lastMessage, m.timestamp lastMessageTimestamp\n        FROM chat_friends cf \n        INNER JOIN messages m ON m.chat_friends_id = cf.id\n        WHERE m.id = (\n            SELECT id\n            FROM messages\n            WHERE chat_friends_id = cf.id\n            ORDER BY timestamp DESC\n            LIMIT 1\n        )"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '21138aaf55ff12a19449cf4bfa842cfe')"
+    ]
+  }
+}
