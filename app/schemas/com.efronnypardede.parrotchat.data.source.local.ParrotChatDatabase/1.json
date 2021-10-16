@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "21138aaf55ff12a19449cf4bfa842cfe",
+    "identityHash": "af0073f95f35219d34b5fb6d218fe3c2",
     "entities": [
       {
         "tableName": "chat_friends",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `friends_name` TEXT NOT NULL, `image_url` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `image_url` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "friendsName",
-            "columnName": "friends_name",
+            "fieldPath": "name",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -35,12 +35,12 @@
         },
         "indices": [
           {
-            "name": "index_chat_friends_friends_name",
+            "name": "index_chat_friends_name",
             "unique": true,
             "columnNames": [
-              "friends_name"
+              "name"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_chat_friends_friends_name` ON `${TABLE_NAME}` (`friends_name`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_chat_friends_name` ON `${TABLE_NAME}` (`name`)"
           }
         ],
         "foreignKeys": []
@@ -113,7 +113,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '21138aaf55ff12a19449cf4bfa842cfe')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'af0073f95f35219d34b5fb6d218fe3c2')"
     ]
   }
 }

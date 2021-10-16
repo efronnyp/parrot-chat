@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Parrot Chat</string>
+    <string name="no_message_label">No message at the moment.</string>
 </resources>

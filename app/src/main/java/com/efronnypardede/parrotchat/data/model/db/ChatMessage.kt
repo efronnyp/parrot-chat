@@ -10,21 +10,29 @@ import androidx.room.PrimaryKey
     tableName = "messages",
     foreignKeys = [
         ForeignKey(
-            entity = ChatFriend::class,
+            entity = ChatUser::class,
             parentColumns = ["id"],
-            childColumns = ["chat_friends_id"],
+            childColumns = ["sender_id"],
+            onUpdate = CASCADE,
+            onDelete = CASCADE,
+        ),
+        ForeignKey(
+            entity = ChatRoom::class,
+            parentColumns = ["id"],
+            childColumns = ["chat_room_id"],
             onUpdate = CASCADE,
             onDelete = CASCADE,
         ),
     ],
 )
 data class ChatMessage(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @ColumnInfo(name = "sender_id") val senderId: Long,
     @ColumnInfo(
-        name = "chat_friends_id",
+        name = "chat_room_id",
         index = true,
     )
-    val chatFriendsId: Long,
+    val chatRoomId: Long,
     val content: String,
     val timestamp: Long,
 )

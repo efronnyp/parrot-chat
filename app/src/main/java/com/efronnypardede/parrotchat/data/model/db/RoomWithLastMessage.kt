@@ -5,20 +5,20 @@ import androidx.room.Embedded
 
 @DatabaseView(
     value = """
-        SELECT cf.*, m.content lastMessage, m.timestamp lastMessageTimestamp
-        FROM chat_friends cf 
-        INNER JOIN messages m ON m.chat_friends_id = cf.id
+        SELECT cr.*, m.content lastMessage, m.timestamp lastMessageTimestamp
+        FROM chat_rooms cr 
+        INNER JOIN messages m ON m.chat_room_id = cr.id
         WHERE m.id = (
             SELECT id
             FROM messages
-            WHERE chat_friends_id = cf.id
+            WHERE chat_room_id = cr.id
             ORDER BY timestamp DESC
             LIMIT 1
         )
     """
 )
 data class RoomWithLastMessage(
-    @Embedded val chatFriend: ChatFriend,
+    @Embedded val chatRoom: ChatRoom,
     val lastMessage: String,
     val lastMessageTimestamp: Long,
 )
