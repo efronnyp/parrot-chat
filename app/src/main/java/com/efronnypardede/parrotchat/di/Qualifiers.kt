@@ -3,21 +3,21 @@ package com.efronnypardede.parrotchat.di
 import javax.inject.Qualifier
 
 @Qualifier
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
 annotation class LocalMessageDataSource
 
 @Qualifier
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
 annotation class RemoteMessageDataSource
 
 @Qualifier
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
 annotation class EchoWebSocketRequest
 
 @Qualifier
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
 annotation class LocalChatRoomDataSource
 
 @Qualifier
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.BINARY)
 annotation class RemoteChatRoomDataSource

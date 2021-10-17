@@ -8,14 +8,14 @@ import androidx.room.Embedded
     value = """
         SELECT cr.*, m.content lastMessage, m.timestamp lastMessageTimestamp
         FROM chat_rooms cr 
-        INNER JOIN messages m ON m.chat_room_id = cr.id
+        LEFT JOIN messages m ON m.chat_room_id = cr.id
         WHERE m.id = (
             SELECT id
             FROM messages
             WHERE chat_room_id = cr.id
             ORDER BY timestamp DESC
             LIMIT 1
-        )
+        ) OR 1
     """
 )
 data class RoomWithLastMessage(

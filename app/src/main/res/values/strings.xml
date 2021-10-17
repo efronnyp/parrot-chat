@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Parrot Chat</string>
+    <string name="friends_page_title">Chat Friends</string>
     <string name="no_friends_label">No chat friends at the moment.</string>
+    <string name="no_message_label">No messages.</string>
 </resources>

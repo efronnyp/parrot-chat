@@ -5,6 +5,7 @@
     tools:context=".friends.FriendsFragment">
 
     <data>
+        <import type="android.view.View" />
         <import type="com.efronnypardede.parrotchat.friends.FriendsViewModel" />
         <variable
             name="viewModel"
@@ -20,11 +21,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_friends_label"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone" />
+            android:visibility="@{viewModel.hasNoFriends ? View.VISIBLE : View.GONE}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvChatRoom"

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "73f91c9b90144dafd3de674ecfd9400d",
+    "identityHash": "2f1b2b0097d48b3504fb21f61f0f563c",
     "entities": [
       {
         "tableName": "chat_users",
@@ -189,12 +189,12 @@
     "views": [
       {
         "viewName": "rooms_view",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT cr.*, m.content lastMessage, m.timestamp lastMessageTimestamp\n        FROM chat_rooms cr \n        INNER JOIN messages m ON m.chat_room_id = cr.id\n        WHERE m.id = (\n            SELECT id\n            FROM messages\n            WHERE chat_room_id = cr.id\n            ORDER BY timestamp DESC\n            LIMIT 1\n        )"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT cr.*, m.content lastMessage, m.timestamp lastMessageTimestamp\n        FROM chat_rooms cr \n        LEFT JOIN messages m ON m.chat_room_id = cr.id\n        WHERE m.id = (\n            SELECT id\n            FROM messages\n            WHERE chat_room_id = cr.id\n            ORDER BY timestamp DESC\n            LIMIT 1\n        ) OR 1"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '73f91c9b90144dafd3de674ecfd9400d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2f1b2b0097d48b3504fb21f61f0f563c')"
     ]
   }
 }

@@ -39,7 +39,7 @@
             android:layout_marginStart="@dimen/default_item_vertical_padding"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{data.lastMessage}"
+            android:text="@{data.lastMessage ?? @string/no_message_label}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvTimestamp"
             app:layout_constraintStart_toEndOf="@id/tvFriendsName"

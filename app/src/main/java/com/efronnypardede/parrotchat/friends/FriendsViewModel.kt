@@ -1,8 +1,6 @@
 package com.efronnypardede.parrotchat.friends
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.efronnypardede.parrotchat.data.model.db.RoomWithLastMessage
 import com.efronnypardede.parrotchat.data.source.ChatRoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,8 +10,8 @@ import javax.inject.Inject
 class FriendsViewModel @Inject constructor(
     private val chatRoomRepository: ChatRoomRepository
 ) : ViewModel() {
-    val chatRooms: LiveData<List<RoomWithLastMessage>>
-        get() = liveData {
-            chatRoomRepository.getRooms()
-        }
+    val chatRooms: LiveData<List<RoomWithLastMessage>> = liveData {
+        emit(chatRoomRepository.getRooms())
+    }
+    val hasNoFriends: LiveData<Boolean> = chatRooms.map { it.isEmpty() }
 }
