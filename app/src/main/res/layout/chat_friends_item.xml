@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/rounded_rectangle_bg"
-    android:paddingHorizontal="@dimen/default_item_horizontal_padding"
-    android:paddingVertical="@dimen/default_item_vertical_padding">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvFriendsName"
-        android:layout_width="@dimen/chat_room_name_width"
+    <data>
+        <import type="com.efronnypardede.parrotchat.util.DateUtil" />
+        <import type="com.efronnypardede.parrotchat.data.model.db.RoomWithLastMessage" />
+        <variable
+            name="data"
+            type="RoomWithLastMessage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_rectangle_bg"
-        android:padding="4dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Jone" />
+        android:paddingHorizontal="@dimen/default_item_horizontal_padding"
+        android:paddingVertical="@dimen/default_item_vertical_padding">
 
-    <TextView
-        android:id="@+id/tvLastMessage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_item_vertical_padding"
-        android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvTimestamp"
-        app:layout_constraintStart_toEndOf="@id/tvFriendsName"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Hello long long world!" />
+        <TextView
+            android:id="@+id/tvFriendsName"
+            android:layout_width="@dimen/chat_room_name_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectangle_bg"
+            android:padding="4dp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="@{data.chatRoom.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Jone" />
 
-    <TextView
-        android:id="@+id/tvTimestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/cloud"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvLastMessage"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="2021-10-14 02:44" />
+        <TextView
+            android:id="@+id/tvLastMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_item_vertical_padding"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{data.lastMessage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvTimestamp"
+            app:layout_constraintStart_toEndOf="@id/tvFriendsName"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Hello long long world!" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/cloud"
+            android:textSize="10sp"
+            android:text="@{DateUtil.formatToDisplayTimestamp(data.lastMessageTimestamp)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvLastMessage"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2021-10-14 02:44" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

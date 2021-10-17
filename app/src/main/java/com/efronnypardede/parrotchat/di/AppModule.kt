@@ -23,7 +23,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AppModule {
+object AppModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ParrotChatDatabase =
@@ -63,7 +63,11 @@ abstract class AppModule {
     fun provideEchoWebSocketRequest(): Request = Request.Builder()
         .url("wss://ws.ifelse.io")
         .build()
+}
 
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AppBindModule {
     @Binds
     @Singleton
     @LocalMessageDataSource

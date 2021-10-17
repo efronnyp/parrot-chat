@@ -27,7 +27,10 @@ import androidx.room.PrimaryKey
 )
 data class ChatMessage(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
-    @ColumnInfo(name = "sender_id") val senderId: Long,
+    @ColumnInfo(
+        name = "sender_id",
+        index = true,
+    ) val senderId: Long,
     @ColumnInfo(
         name = "chat_room_id",
         index = true,

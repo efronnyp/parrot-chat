@@ -4,6 +4,7 @@ import androidx.room.DatabaseView
 import androidx.room.Embedded
 
 @DatabaseView(
+    viewName = "rooms_view",
     value = """
         SELECT cr.*, m.content lastMessage, m.timestamp lastMessageTimestamp
         FROM chat_rooms cr 
@@ -19,6 +20,6 @@ import androidx.room.Embedded
 )
 data class RoomWithLastMessage(
     @Embedded val chatRoom: ChatRoom,
-    val lastMessage: String,
-    val lastMessageTimestamp: Long,
+    val lastMessage: String?,
+    val lastMessageTimestamp: Long?,
 )

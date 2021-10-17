@@ -5,10 +5,10 @@
     tools:context=".friends.FriendsFragment">
 
     <data>
-
+        <import type="com.efronnypardede.parrotchat.friends.FriendsViewModel" />
         <variable
             name="viewModel"
-            type="com.efronnypardede.parrotchat.friends.FriendsViewModel" />
+            type="FriendsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

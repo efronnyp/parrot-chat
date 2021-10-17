@@ -12,7 +12,7 @@ import javax.inject.Inject
 class FriendsViewModel @Inject constructor(
     private val chatRoomRepository: ChatRoomRepository
 ) : ViewModel() {
-    val chatRooms: LiveData<RoomWithLastMessage>
+    val chatRooms: LiveData<List<RoomWithLastMessage>>
         get() = liveData {
             chatRoomRepository.getRooms()
         }
