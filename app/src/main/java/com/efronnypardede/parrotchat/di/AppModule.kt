@@ -1,10 +1,14 @@
 package com.efronnypardede.parrotchat.di
 
+import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.efronnypardede.parrotchat.data.source.*
 import com.efronnypardede.parrotchat.data.source.local.*
-import com.efronnypardede.parrotchat.data.source.remote.ChatRoomRemoteDataSource
+import com.efronnypardede.parrotchat.data.source.remote.ChatFriendsRemoteDataSource
 import com.efronnypardede.parrotchat.data.source.remote.MessageRemoteDataSource
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -31,9 +35,51 @@ object AppModule {
             context,
             ParrotChatDatabase::class.java,
             "parrot_chat.db"
-        )
-            .createFromAsset("db/parrot_init.db")
-            .build()
+        ).addCallback(object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+                //Pre-populate chat users and chat rooms data
+                db.insert(
+                    "chat_users",
+                    SQLiteDatabase.CONFLICT_REPLACE,
+                    ContentValues().apply {
+                        put("name", "Saffoy")
+                    }
+                )
+                db.insert(
+                    "chat_users",
+                    SQLiteDatabase.CONFLICT_REPLACE,
+                    ContentValues().apply {
+                        put("name", "Silvey Landsey")
+                    }
+                )
+                db.insert(
+                    "chat_users",
+                    SQLiteDatabase.CONFLICT_REPLACE,
+                    ContentValues().apply {
+                        put("name", "Igrias Martin")
+                    }
+                )
+                db.insert(
+                    "chat_rooms",
+                    SQLiteDatabase.CONFLICT_REPLACE,
+                    ContentValues().apply {
+                        put("partner_id", 2L)
+                        put("name", "Silvey")
+                        put("created_timestamp", 1634483423829L)
+                    }
+                )
+                db.insert(
+                    "chat_rooms",
+                    SQLiteDatabase.CONFLICT_REPLACE,
+                    ContentValues().apply {
+                        put("partner_id", 3L)
+                        put("name", "Igrias")
+                        put("created_timestamp", 1634483463312L)
+                    }
+                )
+            }
+        }).build()
 
     @Provides
     @Singleton
@@ -61,7 +107,7 @@ object AppModule {
     @Singleton
     @EchoWebSocketRequest
     fun provideEchoWebSocketRequest(): Request = Request.Builder()
-        .url("wss://ws.ifelse.io")
+        .url("wss://ws.ifelse.io/")
         .build()
 }
 
@@ -85,15 +131,15 @@ abstract class AppBindModule {
 
     @Binds
     @Singleton
-    @LocalChatRoomDataSource
-    abstract fun provideLocalChatRoomDataSource(implementation: ChatRoomLocalDataSource): ChatRoomDataSource
+    @LocalChatFriendsDataSource
+    abstract fun provideLocalChatFriendsDataSource(implementation: ChatFriendsLocalDataSource): ChatFriendsDataSource
 
     @Binds
     @Singleton
-    @RemoteChatRoomDataSource
-    abstract fun provideRemoteChatRoomDataSource(implementation: ChatRoomRemoteDataSource): ChatRoomDataSource
+    @RemoteChatFriendsDataSource
+    abstract fun provideRemoteChatFriendsDataSource(implementation: ChatFriendsRemoteDataSource): ChatFriendsDataSource
 
     @Binds
     @Singleton
-    abstract fun provideChatRoomRepository(implementation: ChatRoomDataRepository): ChatRoomRepository
+    abstract fun provideChatFriendsRepository(implementation: ChatFriendsDataRepository): ChatFriendsRepository
 }

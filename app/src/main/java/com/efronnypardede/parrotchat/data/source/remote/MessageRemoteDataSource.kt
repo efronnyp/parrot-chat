@@ -1,7 +1,6 @@
 package com.efronnypardede.parrotchat.data.source.remote
 
 import com.efronnypardede.parrotchat.data.model.MessagePackage
-import com.efronnypardede.parrotchat.data.model.api.GenericResponse
 import com.efronnypardede.parrotchat.data.model.db.ChatMessage
 import com.efronnypardede.parrotchat.data.source.MessageDataSource
 import com.efronnypardede.parrotchat.di.EchoWebSocketRequest
@@ -45,15 +44,6 @@ class MessageRemoteDataSource @Inject constructor(
             webSocket = okHttpClient.newWebSocket(
                 webSocketRequest,
                 object : WebSocketListener() {
-                    override fun onOpen(webSocket: WebSocket, response: Response) {
-                        val pretendToSubscribeChatRoom = GenericResponse(
-                            code = 7001,
-                            message = "subsribe",
-                            data = roomId
-                        )
-                        webSocket.send(gson.toJson(pretendToSubscribeChatRoom))
-                    }
-
                     override fun onFailure(
                         webSocket: WebSocket,
                         t: Throwable,

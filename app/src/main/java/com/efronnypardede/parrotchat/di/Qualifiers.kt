@@ -16,8 +16,8 @@ annotation class EchoWebSocketRequest
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class LocalChatRoomDataSource
+annotation class LocalChatFriendsDataSource
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class RemoteChatRoomDataSource
+annotation class RemoteChatFriendsDataSource

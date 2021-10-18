@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.Gravity" />
+
+        <import type="com.efronnypardede.parrotchat.data.model.db.ChatMessage" />
+
+        <import type="com.efronnypardede.parrotchat.util.DateUtil" />
+
+        <variable
+            name="roomOwner"
+            type="Long" />
+
+        <variable
+            name="chatMessage"
+            type="ChatMessage" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/messageBubbleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_item_margin"
+        android:layout_gravity="start"
+        android:maxWidth="250dp"
+        android:minWidth="130dp"
+        android:minHeight="55dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="12dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="250dp"
+                android:text="@{chatMessage.content}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="Hello world sadasdsad asdasdsad asdsad asdasdsad asdasdasd asdasdsa asdsad asdsadas!" />
+
+            <TextView
+                android:id="@+id/tvMessageTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginTop="4dp"
+                android:text="@{DateUtil.formatToDisplayTimestamp(chatMessage.timestamp)}"
+                android:textSize="9sp"
+                tools:text="2021-10-11 22:10" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

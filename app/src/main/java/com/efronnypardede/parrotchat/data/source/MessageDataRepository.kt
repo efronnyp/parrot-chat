@@ -4,7 +4,8 @@ import com.efronnypardede.parrotchat.data.model.MessagePackage
 import com.efronnypardede.parrotchat.data.model.db.ChatMessage
 import com.efronnypardede.parrotchat.di.LocalMessageDataSource
 import com.efronnypardede.parrotchat.di.RemoteMessageDataSource
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class MessageDataRepository @Inject constructor(
@@ -12,16 +13,8 @@ class MessageDataRepository @Inject constructor(
     @RemoteMessageDataSource private val remoteDataSource: MessageDataSource,
 ) : MessageRepository {
     override fun getAllMessages(roomId: Long): Flow<List<ChatMessage>> {
-        return flow {
-            val remoteMessages = remoteDataSource.getMessages(roomId)
-            localDataSource.insertMessages(remoteMessages)
-            emit(localDataSource.getMessages(roomId))
-            // Observe form Web socket
-            emitAll(
-                remoteDataSource.observeMessages(roomId)
-                    .onEach(localDataSource::insertMessages)
-            )
-        }
+        return remoteDataSource.observeMessages(roomId)
+            .onEach(localDataSource::insertMessages)
     }
 
     override suspend fun sendMessage(messagePackage: MessagePackage) {

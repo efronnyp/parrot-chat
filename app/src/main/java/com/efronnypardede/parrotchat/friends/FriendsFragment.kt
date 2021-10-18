@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.efronnypardede.parrotchat.R
+import androidx.navigation.fragment.findNavController
 import com.efronnypardede.parrotchat.databinding.FragmentFriendsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FriendsFragment private constructor() : Fragment() {
-
+class FriendsFragment : Fragment() {
     companion object {
-        fun newInstance() = FriendsFragment()
+        private const val MY_USER_ID = 1L
     }
 
     private val viewModel by viewModels<FriendsViewModel>()
@@ -34,7 +33,6 @@ class FriendsFragment private constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().setTitle(R.string.friends_page_title)
         setLifecycleOwner()
         setupRecyclerViewAdapter()
     }
@@ -46,7 +44,9 @@ class FriendsFragment private constructor() : Fragment() {
 
     private fun setupRecyclerViewAdapter() {
         viewDataBinding.rvChatRoom.adapter = FriendsListAdapter {
-            //
+            val navDirection = FriendsFragmentDirections
+                .friendsFragmentToChatRoomAction(MY_USER_ID, it.id, it.name, it.partnerId)
+            findNavController().navigate(navDirection)
         }
     }
 }

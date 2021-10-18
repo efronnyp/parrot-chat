@@ -15,7 +15,7 @@ import androidx.room.Embedded
             WHERE chat_room_id = cr.id
             ORDER BY timestamp DESC
             LIMIT 1
-        ) OR 1
+        ) OR NOT EXISTS(SELECT 1 FROM messages WHERE chat_room_id = cr.id)
     """
 )
 data class RoomWithLastMessage(
