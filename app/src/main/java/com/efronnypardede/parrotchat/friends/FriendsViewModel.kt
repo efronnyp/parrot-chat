@@ -10,8 +10,15 @@ import javax.inject.Inject
 class FriendsViewModel @Inject constructor(
     private val chatFriendsRepository: ChatFriendsRepository
 ) : ViewModel() {
-    val chatRooms: LiveData<List<RoomWithLastMessage>> = liveData {
-        emit(chatFriendsRepository.getRooms())
+    private val fetchTrigger: MutableLiveData<Unit> = MutableLiveData()
+    val chatRooms: LiveData<List<RoomWithLastMessage>> = fetchTrigger.switchMap {
+        liveData {
+            emit(chatFriendsRepository.getRooms())
+        }
     }
     val hasNoFriends: LiveData<Boolean> = chatRooms.map { it.isEmpty() }
+
+    fun refreshChatRooms() {
+        fetchTrigger.value = Unit
+    }
 }

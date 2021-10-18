@@ -65,7 +65,8 @@ class FriendsListAdapter(
                 oldItem: RoomWithLastMessage,
                 newItem: RoomWithLastMessage
             ): Boolean = oldItem.chatRoom.name == newItem.chatRoom.name &&
-                    oldItem.chatRoom.imageUrl == newItem.chatRoom.imageUrl
+                    oldItem.chatRoom.imageUrl == newItem.chatRoom.imageUrl &&
+                    oldItem.lastMessage == newItem.lastMessage
         }
     }
 }

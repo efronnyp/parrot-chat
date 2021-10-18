@@ -31,6 +31,11 @@ class FriendsFragment : Fragment() {
         return viewDataBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshChatRooms()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setLifecycleOwner()
