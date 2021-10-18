@@ -2,10 +2,11 @@ package com.efronnypardede.parrotchat.chatroom
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.efronnypardede.parrotchat.R
 import com.efronnypardede.parrotchat.data.model.db.ChatMessage
 import com.efronnypardede.parrotchat.databinding.MessageBubbleItemBinding
 
@@ -23,22 +24,43 @@ class MessageListAdapter(
                 val binding = MessageBubbleItemBinding.inflate(inflater, parent, false)
                 return MessageListViewHolder(binding, roomOwner)
             }
-
         }
 
         fun bind(chatMessage: ChatMessage) {
             binding.apply {
-                roomOwner = this@MessageListViewHolder.roomOwner
-                this@apply.chatMessage = chatMessage
+                this.chatMessage = chatMessage
 
-                val sourceParams = messageBubbleContainer.layoutParams
-                messageBubbleContainer.layoutParams = RelativeLayout.LayoutParams(sourceParams)
-                    .apply {
-                        val gravityRule =
-                            if (chatMessage.senderId == roomOwner) RelativeLayout.ALIGN_PARENT_END
-                            else RelativeLayout.ALIGN_PARENT_START
-                        addRule(gravityRule)
+                ConstraintSet().apply {
+                    clone(messageBubbleRoot)
+                    if (chatMessage.senderId == roomOwner) {
+                        connect(
+                            R.id.messageBubbleContainer,
+                            ConstraintSet.END,
+                            ConstraintSet.PARENT_ID,
+                            ConstraintSet.END,
+                        )
+                        connect(
+                            R.id.messageBubbleContainer,
+                            ConstraintSet.START,
+                            -1,
+                            ConstraintSet.START,
+                        )
+                    } else {
+                        connect(
+                            R.id.messageBubbleContainer,
+                            ConstraintSet.START,
+                            ConstraintSet.PARENT_ID,
+                            ConstraintSet.START,
+                        )
+                        connect(
+                            R.id.messageBubbleContainer,
+                            ConstraintSet.END,
+                            -1,
+                            ConstraintSet.END,
+                        )
                     }
+                    applyTo(messageBubbleRoot)
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import com.efronnypardede.parrotchat.data.model.db.ChatMessage
 import kotlinx.coroutines.flow.Flow
 
 interface MessageRepository {
-    fun getAllMessages(roomId: Long): Flow<List<ChatMessage>>
+    suspend fun getAllMessages(roomId: Long): List<ChatMessage>
+    fun observeNewMessages(roomId: Long): Flow<List<ChatMessage>>
     suspend fun sendMessage(messagePackage: MessagePackage)
 }

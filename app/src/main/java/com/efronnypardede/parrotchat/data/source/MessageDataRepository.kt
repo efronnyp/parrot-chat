@@ -12,7 +12,11 @@ class MessageDataRepository @Inject constructor(
     @LocalMessageDataSource private val localDataSource: MessageDataSource,
     @RemoteMessageDataSource private val remoteDataSource: MessageDataSource,
 ) : MessageRepository {
-    override fun getAllMessages(roomId: Long): Flow<List<ChatMessage>> {
+    override suspend fun getAllMessages(roomId: Long): List<ChatMessage> {
+        return localDataSource.getMessages(roomId)
+    }
+
+    override fun observeNewMessages(roomId: Long): Flow<List<ChatMessage>> {
         return remoteDataSource.observeMessages(roomId)
             .onEach(localDataSource::insertMessages)
     }

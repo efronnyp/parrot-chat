@@ -43,6 +43,7 @@ object AppModule {
                     "chat_users",
                     SQLiteDatabase.CONFLICT_REPLACE,
                     ContentValues().apply {
+                        put("id", 1L)
                         put("name", "Saffoy")
                     }
                 )
@@ -50,6 +51,7 @@ object AppModule {
                     "chat_users",
                     SQLiteDatabase.CONFLICT_REPLACE,
                     ContentValues().apply {
+                        put("id", 2L)
                         put("name", "Silvey Landsey")
                     }
                 )
@@ -57,6 +59,7 @@ object AppModule {
                     "chat_users",
                     SQLiteDatabase.CONFLICT_REPLACE,
                     ContentValues().apply {
+                        put("id", 3L)
                         put("name", "Igrias Martin")
                     }
                 )
@@ -66,7 +69,7 @@ object AppModule {
                     ContentValues().apply {
                         put("partner_id", 2L)
                         put("name", "Silvey")
-                        put("created_timestamp", 1634483423829L)
+                        put("created_timestamp", System.currentTimeMillis())
                     }
                 )
                 db.insert(
@@ -75,7 +78,7 @@ object AppModule {
                     ContentValues().apply {
                         put("partner_id", 3L)
                         put("name", "Igrias")
-                        put("created_timestamp", 1634483463312L)
+                        put("created_timestamp", System.currentTimeMillis())
                     }
                 )
             }
