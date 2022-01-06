@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.efronnypardede.parrotchat.chatroom.ChatRoomViewModel" />
+
+        <variable
+            name="viewModel"
+            type="ChatRoomViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMessageList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/cloud"
+            android:paddingVertical="8dp"
+            app:items="@{viewModel.messages}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/etComposeMessage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="0.9"
+            tools:listitem="@layout/message_bubble_item" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etComposeMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_item_margin"
+            android:autofillHints="@string/enter_message_hint"
+            android:background="@drawable/rounded_rectangle_bg"
+            android:hint="@string/enter_message_hint"
+            android:inputType="textMultiLine"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="@={viewModel.typedMessage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnSend"
+            app:layout_constraintHorizontal_weight="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvMessageList" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_item_margin"
+            android:enabled="@{viewModel.typedMessage.trim().length() > 0}"
+            android:onClick="@{() -> viewModel.sendMessage()}"
+            app:icon="@drawable/ic_send_24"
+            app:layout_constraintBottom_toBottomOf="@id/etComposeMessage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.15"
+            app:layout_constraintStart_toEndOf="@id/etComposeMessage"
+            app:layout_constraintTop_toTopOf="@id/etComposeMessage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

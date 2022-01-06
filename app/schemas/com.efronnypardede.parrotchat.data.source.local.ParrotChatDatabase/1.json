@@ -1,0 +1,200 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "0ced2483c03c5ba713041b00694dba11",
+    "entities": [
+      {
+        "tableName": "chat_users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `profile_url` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profileUrl",
+            "columnName": "profile_url",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "chat_rooms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `partner_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `created_timestamp` INTEGER NOT NULL, `image_url` TEXT, FOREIGN KEY(`partner_id`) REFERENCES `chat_users`(`id`) ON UPDATE CASCADE ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnerId",
+            "columnName": "partner_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdTimestamp",
+            "columnName": "created_timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_chat_rooms_partner_id",
+            "unique": true,
+            "columnNames": [
+              "partner_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_chat_rooms_partner_id` ON `${TABLE_NAME}` (`partner_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "chat_users",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "partner_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "messages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sender_id` INTEGER NOT NULL, `chat_room_id` INTEGER NOT NULL, `content` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`sender_id`) REFERENCES `chat_users`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`chat_room_id`) REFERENCES `chat_rooms`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "senderId",
+            "columnName": "sender_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chatRoomId",
+            "columnName": "chat_room_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_messages_sender_id",
+            "unique": false,
+            "columnNames": [
+              "sender_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_messages_sender_id` ON `${TABLE_NAME}` (`sender_id`)"
+          },
+          {
+            "name": "index_messages_chat_room_id",
+            "unique": false,
+            "columnNames": [
+              "chat_room_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_messages_chat_room_id` ON `${TABLE_NAME}` (`chat_room_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "chat_users",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "sender_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "chat_rooms",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "chat_room_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "rooms_view",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT cr.*, m.content lastMessage, m.timestamp lastMessageTimestamp\n        FROM chat_rooms cr \n        LEFT JOIN messages m ON m.chat_room_id = cr.id\n        WHERE m.id = (\n            SELECT id\n            FROM messages\n            WHERE chat_room_id = cr.id\n            ORDER BY timestamp DESC\n            LIMIT 1\n        ) OR NOT EXISTS(SELECT 1 FROM messages WHERE chat_room_id = cr.id)"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0ced2483c03c5ba713041b00694dba11')"
+    ]
+  }
+}

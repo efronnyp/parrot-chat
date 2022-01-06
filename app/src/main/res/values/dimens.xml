@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_horizontal_padding">24dp</dimen>
+    <dimen name="default_vertical_padding">24dp</dimen>
+    <dimen name="default_item_horizontal_padding">16dp</dimen>
+    <dimen name="default_item_vertical_padding">16dp</dimen>
+    <dimen name="default_item_margin">16dp</dimen>
+
+    <dimen name="chat_room_name_width">64dp</dimen>
+</resources>
